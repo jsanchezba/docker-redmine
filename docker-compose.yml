@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  main:
+    image: redmine-plugins
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - /my/storage/path/files:/usr/src/redmine/files
+    environment:
+      REDMINE_DB_POSTGRES: db
+      REDMINE_DB_USERNAME: redmine
+      REDMINE_DB_PASSWORD: ${REDMINE_DB_PASSWORD}
+      REDMINE_SECRET_KEY_BASE: ${REDMINE_SECRET_KEY_BASE}
+      REDMINE_PLUGINS_MIGRATE: "true"
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${REDMINE_DB_PASSWORD}
+      - POSTGRES_USER=redmine
+      - POSTGRES_DB=redmine
+volumes:
+  db:
